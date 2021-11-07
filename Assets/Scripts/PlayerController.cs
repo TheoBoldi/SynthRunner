@@ -5,8 +5,10 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed;
-    public List<Transform> playerGrid;
+    public int score = 0;
+    public int life = 3;
 
+    private List<Transform> playerGrid;
     private bool isMoving = false;
     private float minX;
     private float maxX;
@@ -22,7 +24,7 @@ public class PlayerController : MonoBehaviour
     {
         m_rb = GetComponent<Rigidbody>();
         movePoint.parent = null;
-        playerGrid = GameObject.FindObjectOfType<GridManager>().playerGrid;
+        playerGrid = GameObject.FindObjectOfType<PlayerGridManager>().playerGrid;
         minX = playerGrid[0].transform.position.x;
         maxX = playerGrid[2].transform.position.x;
         minY = playerGrid[7].transform.position.y;
@@ -86,5 +88,18 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Wall"))
+        {
+            life -= 1;
+        }
+
+        if (other.CompareTag("Note"))
+        {
+            score += 10;
+        }
     }
 }
