@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
         if (!isMoving)
         {
-            if (Input.GetKeyDown(KeyCode.RightArrow))
+            if (SwipeInput.swipedRight)
             {
                 if (transform.position.x < maxX)
                 {
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            if (SwipeInput.swipedLeft)
             {
                 if (transform.position.x > minX)
                 {
@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (SwipeInput.swipedUp)
             {
                 if (transform.position.y < maxY)
                 {
@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (SwipeInput.swipedDown)
             {
                 if (transform.position.y > minY)
                 {
