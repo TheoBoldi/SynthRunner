@@ -7,19 +7,19 @@ public class GameManager : MonoBehaviour
 {
     public Canvas gameCanvas;
     public Canvas gameOverCanvas;
-    private PlayerController player;
+    public int score = 0;
+    public int life = 3;
 
     // Start is called before the first frame update
     void Start()
     {
         Time.timeScale = 1;
-        player = GameObject.FindObjectOfType<PlayerController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(player.life == 0)
+        if(life == 0)
         {
             Time.timeScale = 0;
             gameCanvas.gameObject.SetActive(false);

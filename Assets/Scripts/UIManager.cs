@@ -8,18 +8,18 @@ public class UIManager : MonoBehaviour
     public Text scoreText;
     public Text lifeText;
 
-    private PlayerController player;
+    private GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindObjectOfType<PlayerController>();
+        gameManager = GameObject.FindObjectOfType<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        scoreText.text = "Score : " + player.score.ToString();
-        lifeText.text = "Life : " + player.life.ToString();
+        scoreText.text = "Score : " + gameManager.score.ToString();
+        lifeText.text = "Life : " + gameManager.life.ToString();
     }
 }

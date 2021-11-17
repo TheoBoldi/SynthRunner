@@ -5,31 +5,26 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed;
-    public int score = 0;
-    public int life = 3;
-
-    private List<Transform> playerGrid;
-    private bool isMoving = false;
-    private float minX;
-    private float maxX;
-    private float minY;
-    private float maxY;
-    private int actualPos;
-
-    private Rigidbody m_rb;
     public Transform movePoint;
+    [HideInInspector] public int actualPos;
+    [HideInInspector] public List<Vector3> playerGrid;
+
+    private Vector3 posLeft = new Vector3(-5, 0, 0);
+    private Vector3 posCenter = new Vector3(0, 0, 0);
+    private Vector3 posRight = new Vector3(5, 0, 0);
+    private Rigidbody m_rb;
+    private GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.FindObjectOfType<GameManager>();
         m_rb = GetComponent<Rigidbody>();
         movePoint.parent = null;
-        playerGrid = GameObject.FindObjectOfType<PlayerGridManager>().playerGrid;
-        minX = playerGrid[0].transform.position.x;
-        maxX = playerGrid[2].transform.position.x;
-        minY = playerGrid[7].transform.position.y;
-        maxY = playerGrid[1].transform.position.y;
-        actualPos = 4;
+        playerGrid.Add(posLeft);
+        playerGrid.Add(posCenter);
+        playerGrid.Add(posRight);
+        actualPos = 1;
     }
 
     // Update is called once per frame
@@ -37,69 +32,41 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
 
-        if (!isMoving)
+        if (SwipeInput.swipedRight && actualPos < 2)
         {
-            if (SwipeInput.swipedRight)
-            {
-                if (transform.position.x < maxX)
-                {
-                    isMoving = true;
-                    movePoint.position = playerGrid[actualPos + 1].transform.position;
-                    actualPos += 1;
-                }
-            }
-
-            if (SwipeInput.swipedLeft)
-            {
-                if (transform.position.x > minX)
-                {
-                    isMoving = true;
-                    movePoint.position = playerGrid[actualPos - 1].transform.position;
-                    actualPos -= 1;
-                }
-            }
-
-            if (SwipeInput.swipedUp)
-            {
-                if (transform.position.y < maxY)
-                {
-                    isMoving = true;
-                    movePoint.position = playerGrid[actualPos - 3].transform.position;
-                    actualPos -= 3;
-                }
-            }
-
-            if (SwipeInput.swipedDown)
-            {
-                if (transform.position.y > minY)
-                {
-                    isMoving = true;
-                    movePoint.position = playerGrid[actualPos + 3].transform.position;
-                    actualPos += 3;
-                }
-            }
+            movePoint.position = playerGrid[actualPos + 1];
+            actualPos += 1;
         }
 
-        else
+        if (SwipeInput.swipedLeft && actualPos > 0)
         {
-            if(transform.position == playerGrid[actualPos].position)
-            {
-                isMoving = false;
-            }
+            movePoint.position = playerGrid[actualPos - 1];
+            actualPos -= 1;
         }
 
+        if (SwipeInput.swipedUp)
+        {
+            //Jump
+
+        }
+
+        if (SwipeInput.swipedDown)
+        {
+            //Dodge
+
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Wall"))
         {
-            life -= 1;
+            gameManager.life -= 1;
         }
 
         if (other.CompareTag("Note"))
         {
-            score += 10;
+            gameManager.score += 10;
         }
     }
 }
