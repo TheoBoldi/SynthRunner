@@ -23,14 +23,14 @@ public class FrequenciesScalerModifier : FrequenciesModifier
             yield return null;
         }
 
-        m_isBeat = false;
+        _isBeat = false;
     }
 
     public override void OnUpdate()
     {
         base.OnUpdate();
 
-        if (m_isBeat) return;
+        if (_isBeat) return;
 
         transform.localScale = Vector3.Lerp(transform.localScale, restScale, restSmoothTime * Time.deltaTime);
     }

@@ -10,48 +10,61 @@ public class FrequenciesModifier : MonoBehaviour
     public float timeToBeat;
     public float restSmoothTime;
 
-    private float m_previousAudioValue;
-    private float m_audioValue;
-    private float m_timer;
+    private float _previousAudioValue;
+    private float _audioValue;
+    private float _timer;
 
-    protected bool m_isBeat;
+    protected bool _isBeat;
 
     public int _frequencyBand;
     public bool _useBuffer = false;
 
     public virtual void OnBeat()
     {
-        m_timer = 0;
-        m_isBeat = true;
+        _timer = 0;
+        _isBeat = true;
     }
 
     public virtual void OnUpdate()
     {
-        m_previousAudioValue = m_audioValue;
-        m_audioValue = _useBuffer ? AudioPeer._bandBuffer[_frequencyBand] : AudioPeer._freqBands[_frequencyBand];
-        Debug.Log("Band Previous Value : " + m_previousAudioValue);
-        Debug.Log("Band Actual Value : " + m_audioValue);
-
-        if (m_previousAudioValue > bias &&
-            m_audioValue <= bias)
+        _previousAudioValue = _audioValue;
+        _audioValue = _useBuffer ? AudioPeer._bandBuffer[_frequencyBand] : AudioPeer._freqBands[_frequencyBand];
+        if (_previousAudioValue > bias &&
+            _audioValue <= bias)
         {
-            if (m_timer > timeStep)
+            if (_timer > timeStep)
                 OnBeat();
         }
 
-        if (m_previousAudioValue <= bias &&
-            m_audioValue > bias)
+        if (_previousAudioValue <= bias &&
+            _audioValue > bias)
         {
-            if (m_timer > timeStep)
+            if (_timer > timeStep)
                 OnBeat();
         }
 
-        m_timer += Time.deltaTime;
+        _timer += Time.deltaTime;
     }
 
     private void Update()
     {
         OnUpdate();
     }
-   
+    //public int _frequencyBand;
+    //public bool _useBuffer = false;
+    //void Start()
+    //{
+
+    //}
+
+    //// Update is called once per frame
+    //void Update()
+    //{
+    //    OnUpdate();
+    //}
+
+    //public virtual void OnUpdate()
+    //{
+
+    //}
 }
