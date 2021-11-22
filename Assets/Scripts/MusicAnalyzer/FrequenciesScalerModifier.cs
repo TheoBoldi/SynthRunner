@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class FrequenciesScalerModifier : FrequenciesModifier
 {
 
     public Vector3 beatScale;
     public Vector3 restScale;
+    public float scaleMultiplier;
     private IEnumerator MoveToScale(Vector3 _target)
     {
         Vector3 _curr = transform.localScale;
@@ -43,4 +45,8 @@ public class FrequenciesScalerModifier : FrequenciesModifier
         StartCoroutine("MoveToScale", beatScale);
     }
 
+    public override void OnIntensity(float intensity)
+    {
+        transform.localScale = new Vector3(restScale.x, intensity * scaleMultiplier + restScale.y, restScale.z);
+    }
 }
