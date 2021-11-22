@@ -86,6 +86,8 @@ public class Phyllotaxis : MonoBehaviour
         {
             if (_useScaleCurve)
             {
+                if (float.IsNaN(AudioPeer._audioBand[_lerpPosBand])) return;
+
                 _scaleTimer += Time.deltaTime * _scaleAnimSpeed * AudioPeer._audioBand[_scaleBand];
                 if (_scaleTimer >= 1)
                 {
