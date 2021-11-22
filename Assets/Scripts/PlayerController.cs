@@ -14,20 +14,15 @@ public class PlayerController : MonoBehaviour
     private float newXPos = 0f;
     private float x = 0f;
     private float y = 0f;
-    private float colHeight = 0f;
-    private float colCenterY = 0f;
+    private bool isGrounded = true;
     private bool inJump = false;
     private bool inRoll = false;
-    private CharacterController m_character;
     private Animator m_animator;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_character = GetComponent<CharacterController>();
         m_animator = GetComponentInChildren<Animator>();
-        colHeight = m_character.height;
-        colCenterY = m_character.center.y;
     }
 
     // Update is called once per frame
@@ -63,14 +58,15 @@ public class PlayerController : MonoBehaviour
 
         Vector3 moveVector = new Vector3(x - transform.position.x, y * Time.deltaTime, 0);
         x = Mathf.Lerp(x, newXPos, Time.deltaTime * moveSpeed);
-        m_character.Move(moveVector);
+        transform.Translate(moveVector);
         Jump();
         Roll();
+        GroundCheck();
     }
 
     public void Jump()
     {
-        if (m_character.isGrounded)
+        if (isGrounded)
         {
             if (inJump)
             {
@@ -95,19 +91,35 @@ public class PlayerController : MonoBehaviour
         if(rollCounter <= 0f)
         {
             rollCounter = 0f;
-            m_character.center = new Vector3(0, colCenterY, 0);
-            m_character.height = colHeight;
             inRoll = false;
         }
         if (SwipeInput.swipedDown)
         {
             m_animator.Play("Slide");
             rollCounter = rollDuration;
-            y -= 20f;
-            m_character.center = new Vector3(0, -0.5f, 0);
-            m_character.height = (colHeight / 4f);
+            if (!isGrounded)
+            {
+                y -= 20f;
+            }
             inRoll = true;
             inJump = false;
+        }
+    }
+
+    public void GroundCheck()
+    {
+        if (transform.position.y <= 0.1f)
+        {
+            if (!isGrounded)
+            {
+                y = 0;
+            }
+
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = false;
         }
     }
 }
