@@ -19,11 +19,13 @@ public class PlayerController : MonoBehaviour
     private bool inJump = false;
     private bool inRoll = false;
     private CharacterController m_character;
+    private Animator m_animator;
 
     // Start is called before the first frame update
     void Start()
     {
         m_character = GetComponent<CharacterController>();
+        m_animator = GetComponentInChildren<Animator>();
         colHeight = m_character.height;
         colCenterY = m_character.center.y;
     }
@@ -99,6 +101,7 @@ public class PlayerController : MonoBehaviour
         }
         if (SwipeInput.swipedDown)
         {
+            m_animator.Play("Slide");
             rollCounter = rollDuration;
             y -= 20f;
             m_character.center = new Vector3(0, -0.5f, 0);

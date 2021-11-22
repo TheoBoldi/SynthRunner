@@ -5,10 +5,26 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    private static GameManager _instance = null;
+    public static GameManager Instance
+    {
+        get { return _instance; }
+    }
+
     public Canvas gameCanvas;
     public Canvas gameOverCanvas;
     public int score = 0;
     public int life = 3;
+
+    void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else
+            Destroy(this.gameObject);
+    }
 
     // Start is called before the first frame update
     void Start()
