@@ -4,39 +4,32 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    public float offset;
-    public float moveSpeed;
-
-    private Vector3 posLeft = new Vector3();
-    private Vector3 posCenter = new Vector3();
-    private Vector3 posRight = new Vector3();
+    public float followSpeed = 5f;
+    public float cameraOffset = 2.5f;
     private PlayerController player;
 
     // Start is called before the first frame update
     void Start()
     {
-        posCenter = this.transform.position;
-        posLeft = posCenter - new Vector3(offset, 0, 0);
-        posRight = posCenter + new Vector3(offset, 0, 0);
         player = GameObject.FindObjectOfType<PlayerController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(player.actualPos == 0)
+        if(player.side == Side.Center)
         {
-            transform.position = Vector3.MoveTowards(transform.position, posLeft, moveSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, new Vector3(0, transform.position.y, transform.position.z), followSpeed * Time.deltaTime);
         }
 
-        if (player.actualPos == 1)
+        if(player.side == Side.Left)
         {
-            transform.position = Vector3.MoveTowards(transform.position, posCenter, moveSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, new Vector3(-cameraOffset, transform.position.y, transform.position.z), followSpeed * Time.deltaTime);
         }
 
-        if (player.actualPos == 2)
+        if (player.side == Side.Right)
         {
-            transform.position = Vector3.MoveTowards(transform.position, posRight, moveSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, new Vector3(cameraOffset, transform.position.y, transform.position.z), followSpeed * Time.deltaTime);
         }
     }
 }

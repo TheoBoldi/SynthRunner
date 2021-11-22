@@ -2,71 +2,109 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Side { Left, Center, Right }
 public class PlayerController : MonoBehaviour
 {
+    public float xMove;
     public float moveSpeed;
-    public Transform movePoint;
-    [HideInInspector] public int actualPos;
-    [HideInInspector] public List<Vector3> playerGrid;
+    public float jumpForce;
+    public float rollDuration;
 
-    private Vector3 posLeft = new Vector3(-5, 0, 0);
-    private Vector3 posCenter = new Vector3(0, 0, 0);
-    private Vector3 posRight = new Vector3(5, 0, 0);
-    private Rigidbody m_rb;
-    private GameManager gameManager;
+    [HideInInspector] public Side side = Side.Center;
+    private float newXPos = 0f;
+    private float x = 0f;
+    private float y = 0f;
+    private float colHeight = 0f;
+    private float colCenterY = 0f;
+    private bool inJump = false;
+    private bool inRoll = false;
+    private CharacterController m_character;
 
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameObject.FindObjectOfType<GameManager>();
-        m_rb = GetComponent<Rigidbody>();
-        movePoint.parent = null;
-        playerGrid.Add(posLeft);
-        playerGrid.Add(posCenter);
-        playerGrid.Add(posRight);
-        actualPos = 1;
+        m_character = GetComponent<CharacterController>();
+        colHeight = m_character.height;
+        colCenterY = m_character.center.y;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
-
-        if (SwipeInput.swipedRight && actualPos < 2)
+        if (SwipeInput.swipedLeft && !inRoll)
         {
-            movePoint.position = playerGrid[actualPos + 1];
-            actualPos += 1;
+            if(side == Side.Center)
+            {
+                newXPos = -xMove;
+                side = Side.Left;
+            }
+            else if(side == Side.Right)
+            {
+                newXPos = 0;
+                side = Side.Center;
+            }
         }
 
-        if (SwipeInput.swipedLeft && actualPos > 0)
+        if (SwipeInput.swipedRight && !inRoll)
         {
-            movePoint.position = playerGrid[actualPos - 1];
-            actualPos -= 1;
+            if (side == Side.Center)
+            {
+                newXPos = xMove;
+                side = Side.Right;
+            }
+            else if (side == Side.Left)
+            {
+                newXPos = 0;
+                side = Side.Center;
+            }
         }
 
-        if (SwipeInput.swipedUp)
-        {
-            //Jump
+        Vector3 moveVector = new Vector3(x - transform.position.x, y * Time.deltaTime, 0);
+        x = Mathf.Lerp(x, newXPos, Time.deltaTime * moveSpeed);
+        m_character.Move(moveVector);
+        Jump();
+        Roll();
+    }
 
+    public void Jump()
+    {
+        if (m_character.isGrounded)
+        {
+            if (inJump)
+            {
+                inJump = false;
+            }
+            if (SwipeInput.swipedUp)
+            {
+                y = jumpForce;
+                inJump = true;
+            }
         }
-
-        if (SwipeInput.swipedDown)
+        else
         {
-            //Dodge
-
+            y -= jumpForce * 2 * Time.deltaTime;
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    internal float rollCounter;
+    public void Roll()
     {
-        if (other.CompareTag("Wall"))
+        rollCounter -= Time.deltaTime;
+        if(rollCounter <= 0f)
         {
-            gameManager.life -= 1;
+            rollCounter = 0f;
+            m_character.center = new Vector3(0, colCenterY, 0);
+            m_character.height = colHeight;
+            inRoll = false;
         }
-
-        if (other.CompareTag("Note"))
+        if (SwipeInput.swipedDown)
         {
-            gameManager.score += 10;
+            rollCounter = rollDuration;
+            y -= 20f;
+            m_character.center = new Vector3(0, -0.5f, 0);
+            m_character.height = (colHeight / 4f);
+            inRoll = true;
+            inJump = false;
         }
     }
 }
