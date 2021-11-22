@@ -38,7 +38,7 @@ public class FrequenciesModifier : MonoBehaviour
         {
             _previousAudioValue = _audioValue;
 
-            _audioValue = _useBuffer ? AudioPeer._bandBuffer[_frequencyBand] : AudioPeer._freqBands[_frequencyBand];
+            _audioValue = _useBuffer ? AudioPeer._audioBandBuffer[_frequencyBand] : AudioPeer._audioBand[_frequencyBand];
 
             if (_previousAudioValue > bias &&
                 _audioValue <= bias)
