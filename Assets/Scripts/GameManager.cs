@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -11,6 +12,8 @@ public class GameManager : MonoBehaviour
         get { return _instance; }
     }
 
+    public Text scoreText;
+    public Text lifeText;
     public Canvas gameCanvas;
     public Canvas gameOverCanvas;
     public int score = 0;
@@ -35,16 +38,14 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(life == 0)
+        scoreText.text = "Score : " + score.ToString();
+        lifeText.text = "Life : " + life.ToString();
+
+        if (life == 0)
         {
             Time.timeScale = 0;
             gameCanvas.gameObject.SetActive(false);
             gameOverCanvas.gameObject.SetActive(true);
         }
-    }
-
-    public void Restart()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
