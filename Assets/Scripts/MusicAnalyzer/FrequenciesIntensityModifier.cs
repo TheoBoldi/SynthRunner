@@ -14,6 +14,7 @@ public class FrequenciesIntensityModifier : FrequenciesModifier
 
     void Awake()
     {
+        _useBeat = false;
         _useAmplitude = true;
         _volume = GetComponent<PostProcessVolume>();
         _volume.profile.TryGetSettings(out bloom);

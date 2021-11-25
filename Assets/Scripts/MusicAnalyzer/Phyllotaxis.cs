@@ -109,7 +109,6 @@ public class Phyllotaxis : MonoBehaviour
             {
                 if (float.IsNaN(AudioPeer._audioBand[_lerpPosBand])) return;
 
-                Debug.Log(AudioPeer._audioBand[_lerpPosBand]);
                 float audioValue = AudioPeer._audioBand[_lerpPosBand];
                 _lerpPosSpeed = Mathf.Lerp(_lerpPosSpeedMinMax.x, _lerpPosSpeedMinMax.y,
                     _lerpPosAnimCurve.Evaluate(audioValue));
