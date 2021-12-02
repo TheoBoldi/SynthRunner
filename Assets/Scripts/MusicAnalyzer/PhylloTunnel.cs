@@ -14,9 +14,12 @@ public class PhylloTunnel : MonoBehaviour
 
         Debug.Log(AudioPeer._amplitude);
         _tunnel.position = new Vector3(_tunnel.position.x, _tunnel.position.y,
-            _tunnel.position.z + (AudioPeer._amplitude * _tunnelSpeed));
+            _tunnel.position.z - (AudioPeer._amplitude * _tunnelSpeed));
 
-        this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y,
-            _tunnel.position.z + _cameraDistance);
+
+ if(_tunnel.position.z < -30)
+ _tunnel.position = new Vector3(_tunnel.position.x, _tunnel.position.y, _cameraDistance);
+        // this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y,
+        //     _tunnel.position.z - _cameraDistance);
     }
 }
