@@ -13,7 +13,7 @@ public class PhylloTunnel : MonoBehaviour
         if (float.IsNaN(AudioPeer._amplitude)) return;
 
         _tunnel.position = new Vector3(_tunnel.position.x, _tunnel.position.y,
-            _tunnel.position.z - (AudioPeer._amplitude * _tunnelSpeed));
+            _tunnel.position.z + (AudioPeer._amplitude * _tunnelSpeed));
 
 
         //if(_tunnel.position.z < -30)
