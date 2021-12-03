@@ -44,6 +44,7 @@ public class PaternGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        frequence = MusicManager.Instance.GetActiveFrequency();
         for (int i = 0; i < instanciatedObjects.Count; i++)
         {
             instanciatedObjects[i].transform.Translate(-Vector3.forward * Time.deltaTime * speed);

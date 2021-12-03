@@ -8,11 +8,12 @@ public class TileManager : MonoBehaviour
     public float tileLength;
     public int numberOfTiles;
     public float zSpawn;
+    public float height;
 
     private float oldSpeed;
     private Transform playerTransform;
     private List<GameObject> activeTiles = new List<GameObject>();
-
+    private Vector3 _resetPos;
     void Start()
     {
         for (int i = 0; i < numberOfTiles; i++)
@@ -29,6 +30,7 @@ public class TileManager : MonoBehaviour
             }
         }
 
+        _resetPos = new Vector3(0, 0, zSpawn);
         playerTransform = GameObject.FindObjectOfType<PlayerController>().transform;
         Tile.speed = tileSpeed;
         oldSpeed = tileSpeed;
@@ -42,16 +44,35 @@ public class TileManager : MonoBehaviour
             Tile.speed = tileSpeed;
         }
 
-        if(activeTiles[0].gameObject.transform.position.z < playerTransform.position.z - tileLength)
+        for (int i = 0; i < activeTiles.Count; i++)
         {
-            SpawnTile(Random.Range(0, tilePrefabs.Length));
-            DeleteTile();
-        }          
+
+            if (activeTiles[i].gameObject.transform.position.z < playerTransform.position.z - (tileLength / 2) - 1f)
+            {
+                activeTiles[i].transform.position = GetLastTilePosition(i);
+            }
+
+        }
     }
 
+    public Vector3 GetLastTilePosition(int index)
+    {
+        if (index > 0)
+        {
+            index--;
+        }
+        else
+        {
+            index = activeTiles.Count - 1;
+        }
+
+        Vector3 lastTilePos = activeTiles[index].transform.position;
+        lastTilePos.z += tileLength;
+        return lastTilePos;
+    }
     public void SpawnTile(int index)
     {
-        GameObject go = Instantiate(tilePrefabs[index], new Vector3(0, 0, 1 * zSpawn), transform.rotation);
+        GameObject go = Instantiate(tilePrefabs[index], new Vector3(0, height, 1 * zSpawn), transform.rotation);
         go.transform.parent = this.gameObject.transform;
         activeTiles.Add(go);
     }

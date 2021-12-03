@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8524725996673203402}
   - component: {fileID: 2233191352212687217}
   - component: {fileID: 5235208168962533556}
+  - component: {fileID: 1386367927607894882}
   m_Layer: 0
   m_Name: Model
   m_TagString: Wall
@@ -28,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2093236781399710842}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalPosition: {x: 0, y: 3.5, z: 0}
   m_LocalScale: {x: 5, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 7895011239273314186}
@@ -61,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b905f60df09c8245b6e0d5af2e04c7f, type: 2}
+  - {fileID: 2100000, guid: 2a8f1e3c8c073314c97996c81226fcc2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -108,6 +109,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d0760d548e7334a959b1ebd1d14bc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!111 &1386367927607894882
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2093236781399710842}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 394d20d4b92edd84d95ca38cc30825ec, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 394d20d4b92edd84d95ca38cc30825ec, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &8693932805838194853
 GameObject:
   m_ObjectHideFlags: 0

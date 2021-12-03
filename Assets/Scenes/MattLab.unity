@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731689, g: 0.13414702, b: 0.1210784, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1305,7 +1305,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &123660218
 Transform:
   m_ObjectHideFlags: 0
@@ -8549,11 +8549,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3591329196684841844, guid: b7d07cca7dfe7c24ab676b18c4c2ec81,
-        type: 3}
-      propertyPath: m_audioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: f071feb3a9119f947b8998c6a5b4a3bc, type: 3}
     - target: {fileID: 3591329196684841845, guid: b7d07cca7dfe7c24ab676b18c4c2ec81,
         type: 3}
       propertyPath: m_RootOrder
@@ -8613,16 +8608,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Music
-      objectReference: {fileID: 0}
-    - target: {fileID: 3591329196684841846, guid: b7d07cca7dfe7c24ab676b18c4c2ec81,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3591329196684841847, guid: b7d07cca7dfe7c24ab676b18c4c2ec81,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7d07cca7dfe7c24ab676b18c4c2ec81, type: 3}
