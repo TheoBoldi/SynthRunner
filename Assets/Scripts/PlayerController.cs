@@ -8,12 +8,14 @@ public class PlayerController : MonoBehaviour
     public float xMove;
     public float moveSpeed;
     public float jumpForce;
-    public float rollDuration;
+    public float rollForce;
+    public float gravityScale;
 
     [HideInInspector] public Side side = Side.Center;
     private float newXPos = 0f;
     private float x = 0f;
     private float y = 0f;
+    private float rollDuration;
     private bool isGrounded = true;
     private bool inJump = false;
     private bool inRoll = false;
@@ -23,12 +25,13 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         m_animator = GetComponentInChildren<Animator>();
+        rollDuration = m_animator.runtimeAnimatorController.animationClips[1].length;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (SwipeInput.swipedLeft && !inRoll)
+        if (SwipeInput.swipedLeft)
         {
             if(side == Side.Center)
             {
@@ -42,7 +45,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (SwipeInput.swipedRight && !inRoll)
+        if (SwipeInput.swipedRight)
         {
             if (side == Side.Center)
             {
@@ -56,7 +59,11 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        Vector3 moveVector = new Vector3(x - transform.position.x, y * Time.deltaTime, 0);
+        var pos = transform.position;
+        pos.y = Mathf.Clamp(transform.position.y, 0, transform.position.y);
+        transform.position = pos;
+
+        Vector3 moveVector = new Vector3(x - transform.position.x, y * Time.deltaTime * gravityScale, 0);
         x = Mathf.Lerp(x, newXPos, Time.deltaTime * moveSpeed);
         transform.Translate(moveVector);
         Jump();
@@ -78,9 +85,9 @@ public class PlayerController : MonoBehaviour
                 inJump = true;
             }
         }
-        else
+        else 
         {
-            y -= jumpForce * 2 * Time.deltaTime;
+            y -= jumpForce * 1.25f * gravityScale * Time.deltaTime;
         }
     }
 
@@ -99,7 +106,7 @@ public class PlayerController : MonoBehaviour
             rollCounter = rollDuration;
             if (!isGrounded)
             {
-                y -= 20f;
+                y -= rollForce;
             }
             inRoll = true;
             inJump = false;
