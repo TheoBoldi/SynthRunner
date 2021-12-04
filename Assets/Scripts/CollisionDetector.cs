@@ -18,14 +18,19 @@ public class CollisionDetector : MonoBehaviour
         {
             if(this.tag == "Wall")
             {
+                SoundEffectManager.instance.HitObstacle();
                 GameManager.Instance.life -= 1;
                 Destroy(this.gameObject);
             }
 
-            if (this.tag == "Note")
+            if (this.tag == "Purple" || this.tag == "Blue" || this.tag == "Green")
             {
-                GameManager.Instance.score += 10;
-                Destroy(this.gameObject);
+                if (PlayerController.inCharge)
+                {
+                    SoundEffectManager.instance.GoodNote();
+                    GameManager.Instance.score += 10;
+                    Destroy(this.gameObject);
+                }
             }
         }
     }

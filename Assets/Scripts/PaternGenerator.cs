@@ -80,6 +80,13 @@ public class PaternGenerator : MonoBehaviour
                 newGO.transform.parent = this.gameObject.transform;
                 instanciatedObjects.Add(newGO);
             }
+            if(actualParten[i] != ObstacleType.Wall)
+            {
+                var tmp = Resources.Load("Prefabs/Note");
+                GameObject newGO = Instantiate(tmp as GameObject, gridPositions[i].position, gridPositions[i].rotation);
+                newGO.transform.parent = this.gameObject.transform;
+                instanciatedObjects.Add(newGO);
+            }
         }
 
         yield return new WaitForSeconds(frequence);
