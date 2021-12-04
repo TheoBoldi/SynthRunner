@@ -46,10 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xMove: 5
-  moveSpeed: 10
+  moveSpeed: 15
   jumpForce: 12.5
   rollForce: 20
-  gravityScale: 2
+  gravityScale: 2.5
   side: 1
 --- !u!114 &6661150576324191052
 MonoBehaviour:
