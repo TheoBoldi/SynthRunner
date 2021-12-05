@@ -50,6 +50,9 @@ MonoBehaviour:
   jumpForce: 12.5
   rollForce: 20
   gravityScale: 2.5
+  targetColor: {r: 1, g: 1, b: 1, a: 1}
+  invincibilityTime: 0.3
+  hitDuration: 1
   side: 1
 --- !u!114 &6661150576324191052
 MonoBehaviour:

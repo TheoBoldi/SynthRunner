@@ -10,6 +10,13 @@ public class PlayerController : MonoBehaviour
     public float jumpForce;
     public float rollForce;
     public float gravityScale;
+    public Color targetColor;
+    private Color actualColor;
+    public float invincibilityTime;
+    public float hitDuration;
+    private float _timerSwitchColor;
+    public static bool switchBack = false;
+    private float _timerSwitchBack;
 
     [HideInInspector] public Side side = Side.Center;
     private float newXPos = 0f;
@@ -20,13 +27,19 @@ public class PlayerController : MonoBehaviour
     private bool inJump = false;
     private bool inRoll = false;
     public static bool inCharge = false;
+    public static bool isHit = false;
     private Animator m_animator;
+    private MeshRenderer m_renderer;
 
     // Start is called before the first frame update
     void Start()
     {
         inCharge = false;
+        isHit = false;
+        switchBack = false;
         m_animator = GetComponentInChildren<Animator>();
+        m_renderer = GetComponentInChildren<MeshRenderer>();
+        actualColor = m_renderer.material.color;
         rollDuration = m_animator.runtimeAnimatorController.animationClips[1].length;
     }
 
@@ -75,6 +88,7 @@ public class PlayerController : MonoBehaviour
         Jump();
         Roll();
         GroundCheck();
+        ChangeMaterial();
     }
 
     public void Jump()
@@ -138,6 +152,38 @@ public class PlayerController : MonoBehaviour
 
         if (isGrounded)
             StartCoroutine(ResetCharge());
+    }
+
+    public void ChangeMaterial()
+    {
+        if (isHit && !switchBack)
+        {
+            _timerSwitchColor += Time.deltaTime;
+            m_renderer.material.SetColor("_BaseColor", targetColor);
+
+            if (_timerSwitchColor >= hitDuration)
+            {
+                switchBack = true;
+                _timerSwitchColor = 0f;
+            }
+        }
+        if (isHit && switchBack)
+        {
+            _timerSwitchBack += Time.deltaTime;
+            m_renderer.material.SetColor("_BaseColor", Color.Lerp(targetColor, actualColor, Mathf.Clamp01(_timerSwitchBack / hitDuration)));
+
+            if (_timerSwitchBack >= hitDuration)
+            {
+                isHit = false;
+                switchBack = false;
+                _timerSwitchBack = 0f;
+            }
+        }
+
+        if (m_renderer.material.color != actualColor && m_renderer.material.color != targetColor && !switchBack)
+        {
+            actualColor = m_renderer.material.color;
+        }
     }
 
     public IEnumerator ResetCharge()

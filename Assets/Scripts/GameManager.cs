@@ -12,13 +12,11 @@ public class GameManager : MonoBehaviour
         get { return _instance; }
     }
 
-    public Text scoreText;
-    public Text lifeText;
     public Canvas gameCanvas;
     public Canvas gameOverCanvas;
-    public int score = 0;
-    public int life = 3;
 
+    [HideInInspector]
+    public int life = 1;
     [HideInInspector]
     public AudioSource mainSource;
 
@@ -43,9 +41,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        scoreText.text = "Score : " + score.ToString();
-        lifeText.text = "Life : " + life.ToString();
-
         if (life == 0)
         {
             Time.timeScale = 0;

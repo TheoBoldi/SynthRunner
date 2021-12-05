@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EZCameraShake;
 
 public class CollisionDetector : MonoBehaviour
 {
@@ -18,8 +19,12 @@ public class CollisionDetector : MonoBehaviour
         {
             if(this.tag == "Wall")
             {
+                CameraShaker.Instance.ShakeOnce(8f, 4f, .1f, 1f);
                 SoundEffectManager.instance.HitObstacle();
-                GameManager.Instance.life -= 1;
+                if(!PlayerController.isHit)
+                    PlayerController.isHit = true;
+                else if(PlayerController.switchBack)
+                    GameManager.Instance.life = 0;
                 Destroy(this.gameObject);
             }
 
@@ -28,7 +33,6 @@ public class CollisionDetector : MonoBehaviour
                 if (PlayerController.inCharge)
                 {
                     SoundEffectManager.instance.GoodNote();
-                    GameManager.Instance.score += 10;
                     Destroy(this.gameObject);
                 }
             }
