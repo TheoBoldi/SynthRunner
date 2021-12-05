@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
     public int score = 0;
     public int life = 3;
 
+    [HideInInspector]
+    public AudioSource mainSource;
+
     void Awake()
     {
         if (_instance == null)
@@ -33,6 +36,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Time.timeScale = 1;
+        Application.targetFrameRate = 60;
+        mainSource = GameObject.FindObjectOfType<MusicManager>().transform.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -44,6 +49,7 @@ public class GameManager : MonoBehaviour
         if (life == 0)
         {
             Time.timeScale = 0;
+            mainSource.Pause();
             gameCanvas.gameObject.SetActive(false);
             gameOverCanvas.gameObject.SetActive(true);
         }

@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour
     {
         if (SwipeInput.swipedLeft)
         {
+            inCharge = false;
+
             if(side == Side.Center)
             {
                 newXPos = -xMove;
@@ -49,6 +51,8 @@ public class PlayerController : MonoBehaviour
 
         if (SwipeInput.swipedRight)
         {
+            inCharge = false;
+
             if (side == Side.Center)
             {
                 newXPos = xMove;
@@ -133,6 +137,12 @@ public class PlayerController : MonoBehaviour
         }
 
         if (isGrounded)
-            inCharge = false;
+            StartCoroutine(ResetCharge());
+    }
+
+    public IEnumerator ResetCharge()
+    {
+        yield return new WaitForSeconds(0.05f);
+        inCharge = false;
     }
 }

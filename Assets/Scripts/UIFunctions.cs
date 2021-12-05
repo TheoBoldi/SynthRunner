@@ -28,11 +28,13 @@ public class UIFunctions : MonoBehaviour
         if (!paused)
         {
             paused = true;
+            GameManager.Instance.mainSource.Pause();
             Time.timeScale = 0;
         }
         else
         {
             paused = false;
+            GameManager.Instance.mainSource.Play();
             Time.timeScale = 1;
         }
     }
