@@ -6,7 +6,7 @@ public class SwipeInput : MonoBehaviour {
 
 	public List<touchLocation> touches = new List<touchLocation>();
 
-	public const float MAX_SWIPE_TIME = 0.5f; 
+	//public const float MAX_SWIPE_TIME = 0.5f; 
 	public const float MIN_SWIPE_DISTANCE = 0.05f;
 
 	public static bool swipedRight = false;
@@ -42,8 +42,8 @@ public class SwipeInput : MonoBehaviour {
 				{
 					touchLocation thisTouch = touches.Find(touchLocation => touchLocation.touchId == t.fingerId);
 
-					if (Time.time - startTime > MAX_SWIPE_TIME) // press too long
-						return;
+					/*if (Time.time - startTime > MAX_SWIPE_TIME) // press too long
+						return;*/
 
 					Vector2 endPos = new Vector2(t.position.x / (float)Screen.width, t.position.y / (float)Screen.width);
 

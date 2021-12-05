@@ -8,13 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/MainMenu.unity
     guid: 32adabd3526f7414e94e07c1648b0a42
-  - enabled: 0
-    path: Assets/Scenes/Theo.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
-    path: Assets/Scenes/MattMain.unity
-    guid: c9a056a4cc46be0418c1190ddff2d6e6
   - enabled: 1
-    path: Assets/Scenes/MattMain1.unity
-    guid: d7d7d9f5f283fe14e8f36d3a4f51ab7d
+    path: Assets/Scenes/TheoMain.unity
+    guid: 4c67cba8316ea244f948ee04faa4533a
   m_configObjects: {}

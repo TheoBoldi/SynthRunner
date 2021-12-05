@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Wall
   - Note
+  - Purple
+  - Blue
+  - Green
   layers:
   - Default
   - TransparentFX

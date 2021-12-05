@@ -19,11 +19,13 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = true;
     private bool inJump = false;
     private bool inRoll = false;
+    public static bool inCharge = false;
     private Animator m_animator;
 
     // Start is called before the first frame update
     void Start()
     {
+        inCharge = false;
         m_animator = GetComponentInChildren<Animator>();
         rollDuration = m_animator.runtimeAnimatorController.animationClips[1].length;
     }
@@ -33,6 +35,8 @@ public class PlayerController : MonoBehaviour
     {
         if (SwipeInput.swipedLeft)
         {
+            inCharge = false;
+
             if(side == Side.Center)
             {
                 newXPos = -xMove;
@@ -47,6 +51,8 @@ public class PlayerController : MonoBehaviour
 
         if (SwipeInput.swipedRight)
         {
+            inCharge = false;
+
             if (side == Side.Center)
             {
                 newXPos = xMove;
@@ -107,6 +113,7 @@ public class PlayerController : MonoBehaviour
             if (!isGrounded)
             {
                 y -= rollForce;
+                inCharge = true;
             }
             inRoll = true;
             inJump = false;
@@ -128,5 +135,14 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = false;
         }
+
+        if (isGrounded)
+            StartCoroutine(ResetCharge());
+    }
+
+    public IEnumerator ResetCharge()
+    {
+        yield return new WaitForSeconds(0.05f);
+        inCharge = false;
     }
 }

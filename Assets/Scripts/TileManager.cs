@@ -12,10 +12,19 @@ public class TileManager : MonoBehaviour
 
     private float oldSpeed;
     private Transform playerTransform;
+    private GameObject leftVolumeBar;
+    private GameObject rightVolumeBar;
+    private Vector3 leftEndPos;
+    private Vector3 rightEndPos;
+    private List<GameObject> leftSideCubes = new List<GameObject>();
+    private List<GameObject> rightSideCubes = new List<GameObject>();
     private List<GameObject> activeTiles = new List<GameObject>();
     private Vector3 _resetPos;
     void Start()
     {
+        leftVolumeBar = GameObject.Find("LeftVolumeBar").transform.GetChild(0).gameObject;
+        rightVolumeBar = GameObject.Find("RightVolumeBar").transform.GetChild(0).gameObject;
+
         for (int i = 0; i < numberOfTiles; i++)
         {
             if (i == 0)
@@ -30,10 +39,18 @@ public class TileManager : MonoBehaviour
             }
         }
 
+        for(int i = 0; i < leftVolumeBar.transform.childCount; i++)
+        {
+            leftSideCubes.Add(leftVolumeBar.transform.GetChild(i).gameObject);
+            rightSideCubes.Add(rightVolumeBar.transform.GetChild(i).gameObject);
+        }
+
         _resetPos = new Vector3(0, 0, zSpawn);
         playerTransform = GameObject.FindObjectOfType<PlayerController>().transform;
         Tile.speed = tileSpeed;
         oldSpeed = tileSpeed;
+        leftEndPos = leftSideCubes[leftSideCubes.Count - 1].transform.position;
+        rightEndPos = rightSideCubes[rightSideCubes.Count - 1].transform.position;
     }
 
     void Update()
@@ -51,7 +68,18 @@ public class TileManager : MonoBehaviour
             {
                 activeTiles[i].transform.position = GetLastTilePosition(i);
             }
+        }
 
+        for(int i = 0; i < leftSideCubes.Count; i++)
+        {
+            leftSideCubes[i].transform.Translate(-Vector3.right * tileSpeed * Time.deltaTime);
+            rightSideCubes[i].transform.Translate(-Vector3.right * tileSpeed * Time.deltaTime);
+
+            if(leftSideCubes[i].transform.position.z < playerTransform.position.z - 2f)
+            {
+                leftSideCubes[i].transform.position = leftEndPos;
+                rightSideCubes[i].transform.position = rightEndPos;
+            }
         }
     }
 
