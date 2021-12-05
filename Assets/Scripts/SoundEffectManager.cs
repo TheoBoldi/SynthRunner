@@ -8,6 +8,7 @@ public class SoundEffectManager : MonoBehaviour
 
     public AudioSource hitObstacle;
     public AudioSource goodNote;
+    public AudioSource launchGame;
 
     private void Awake()
     {
@@ -22,5 +23,10 @@ public class SoundEffectManager : MonoBehaviour
     public void GoodNote()
     {
         goodNote.Play();
+    }
+
+    public void LaunchGame()
+    {
+        launchGame.Play();
     }
 }

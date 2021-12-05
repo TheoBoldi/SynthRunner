@@ -115,4 +115,14 @@ public class AudioPeer : MonoBehaviour
             _audioBandBuffer[i] = (_bandBuffer[i] / _freqBandsHighest[i]);
         }
     }
+
+    public void ChangeAudioProfile(float profile)
+    {
+        for (int i = 0; i < _freqBandsHighest.Length; i++)
+        {
+            _freqBandsHighest[i] = profile;
+        }
+
+        _amplitudeHighest = profile;
+    }
 }

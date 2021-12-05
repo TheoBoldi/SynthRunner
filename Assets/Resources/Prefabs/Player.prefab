@@ -54,6 +54,7 @@ MonoBehaviour:
   invincibilityTime: 0.3
   hitDuration: 1
   side: 1
+  _playerMaterial: {fileID: 2100000, guid: 07cd31007b3275846819a5676bdfb0f0, type: 2}
 --- !u!114 &6661150576324191052
 MonoBehaviour:
   m_ObjectHideFlags: 0

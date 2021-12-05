@@ -16,14 +16,16 @@ public class GameManager : MonoBehaviour
     public Canvas gameOverCanvas;
 
     public bool musicPause = false;
-    public bool gamePause = false;
-    public bool playerPause = false;
-    
+    public bool gamePause = true;
+    public bool isIntro = false;
+    public float introDuration = 4.0f;
+
     [HideInInspector]
     public int life = 1;
     [HideInInspector]
     public AudioSource mainSource;
 
+    private CameraManager _camera;
     void Awake()
     {
         if (_instance == null)
@@ -40,6 +42,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         Application.targetFrameRate = 60;
         mainSource = GameObject.FindObjectOfType<MusicManager>().transform.GetComponent<AudioSource>();
+        _camera = FindObjectOfType<CameraManager>();
     }
 
     // Update is called once per frame
@@ -52,5 +55,28 @@ public class GameManager : MonoBehaviour
             gameCanvas.gameObject.SetActive(false);
             gameOverCanvas.gameObject.SetActive(true);
         }
+    }
+
+    public void EndIntro()
+    {
+        isIntro = false;
+        gamePause = false;
+        MusicManager.Instance.ResetMusicElements();
+        MusicManager.Instance._audioSource.Play();
+    }
+
+    public void LaunchIntro()
+    {
+        StartCoroutine(IntroCoroutine());
+    }
+
+    IEnumerator IntroCoroutine()
+    {
+        MusicManager.Instance._audioSource.Stop();
+        _camera.transform.GetComponent<Animator>().SetTrigger("Launch");
+        isIntro = true;
+        SoundEffectManager.instance.LaunchGame();
+        yield return new WaitForSeconds(introDuration);
+        EndIntro();
     }
 }

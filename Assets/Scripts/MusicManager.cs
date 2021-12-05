@@ -14,6 +14,8 @@ public class MusicManager : MonoBehaviour
         public float _clipDuration;
         public int _kickBand;
         public int _clapBand;
+        public float _audioProfile;
+        public int _tunnelShape;
     }
 
     public float _timeBetweenTracks = 5.0f;
@@ -32,7 +34,11 @@ public class MusicManager : MonoBehaviour
     private int m_activeIndex = 0;
     private bool _transition = false;
 
-    private AudioSource _audioSource;
+    [HideInInspector]
+    public AudioSource _audioSource;
+    private AudioPeer _audioPeer;
+    [HideInInspector]
+    public PhylloTunnel _tunnel;
 
     [HideInInspector]
     public ColorManager _colorManager;
@@ -59,10 +65,17 @@ public class MusicManager : MonoBehaviour
 
         _audioSource = GetComponent<AudioSource>();
         _colorManager = GetComponent<ColorManager>();
-        _audioSource.clip = _trackList[m_activeIndex]._audioClip;
-        _audioSource.Play();
         _kickCubes = _kickCubesHolder.GetComponentsInChildren<FrequenciesScalerModifier>();
         _clapCubes = _clapCubesHolder.GetComponentsInChildren<FrequenciesScalerModifier>();
+        _audioPeer = GetComponent<AudioPeer>();
+        _tunnel = FindObjectOfType<PhylloTunnel>();
+        ResetMusicElements();
+        _audioSource.Play();
+    }
+
+    public void ResetMusicElements()
+    {
+        _audioSource.clip = _trackList[m_activeIndex]._audioClip;
         foreach (FrequenciesScalerModifier cube in _kickCubes)
         {
             cube._frequencyBand = _trackList[m_activeIndex]._kickBand;
@@ -73,9 +86,10 @@ public class MusicManager : MonoBehaviour
             cube._frequencyBand = _trackList[m_activeIndex]._clapBand;
             cube.timeStep = GetActiveBPM() / (60 * 2);
         }
+        _audioPeer.ChangeAudioProfile(_trackList[m_activeIndex]._audioProfile);
+        _tunnel.SwitchShape(_trackList[m_activeIndex]._tunnelShape);
+        m_timer = 0;
     }
-
-
     public float GetActiveIntensity()
     {
         return _trackList[m_activeIndex]._intensityCurve.Evaluate(m_timer);
@@ -103,23 +117,21 @@ public class MusicManager : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.gamePause || GameManager.Instance.isIntro) return;
         if (m_timer >= GetActiveDuration() && !_transition)
         {
             GameManager.Instance.musicPause = true;
             _transition = true;
-            m_timer = 0;
-            m_activeIndex++;
-            _audioSource.clip = _trackList[m_activeIndex]._audioClip;
-            foreach (FrequenciesScalerModifier cube in _kickCubes)
+            if (m_activeIndex >= _trackList.Count - 1)
             {
-                cube._frequencyBand = _trackList[m_activeIndex]._kickBand;
-                cube.timeStep = GetActiveBPM() / (60 * 2);
+                m_activeIndex = 0;
             }
-            foreach (FrequenciesScalerModifier cube in _clapCubes)
+            else
             {
-                cube._frequencyBand = _trackList[m_activeIndex]._clapBand;
-                cube.timeStep = GetActiveBPM() / (60 * 2);
+                m_activeIndex++;
             }
+
+            ResetMusicElements();
             _colorManager.SwitchColor(GetActiveColor());
         }
 
@@ -136,4 +148,5 @@ public class MusicManager : MonoBehaviour
 
         m_timer += Time.deltaTime;
     }
+
 }

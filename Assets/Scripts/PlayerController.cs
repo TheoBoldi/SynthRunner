@@ -29,8 +29,8 @@ public class PlayerController : MonoBehaviour
     public static bool inCharge = false;
     public static bool isHit = false;
     private Animator m_animator;
-    private MeshRenderer m_renderer;
 
+    public Material _playerMaterial;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,14 +38,14 @@ public class PlayerController : MonoBehaviour
         isHit = false;
         switchBack = false;
         m_animator = GetComponentInChildren<Animator>();
-        m_renderer = GetComponentInChildren<MeshRenderer>();
-        actualColor = m_renderer.material.color;
+        actualColor = _playerMaterial.GetColor("_BaseColor");
         rollDuration = m_animator.runtimeAnimatorController.animationClips[1].length;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.isIntro || GameManager.Instance.gamePause) return;
         if (SwipeInput.swipedLeft)
         {
             inCharge = false;
@@ -159,7 +159,7 @@ public class PlayerController : MonoBehaviour
         if (isHit && !switchBack)
         {
             _timerSwitchColor += Time.deltaTime;
-            m_renderer.material.SetColor("_BaseColor", targetColor);
+            _playerMaterial.SetColor("_BaseColor", targetColor);
 
             if (_timerSwitchColor >= hitDuration)
             {
@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
         if (isHit && switchBack)
         {
             _timerSwitchBack += Time.deltaTime;
-            m_renderer.material.SetColor("_BaseColor", Color.Lerp(targetColor, actualColor, Mathf.Clamp01(_timerSwitchBack / hitDuration)));
+            _playerMaterial.SetColor("_BaseColor", Color.Lerp(targetColor, actualColor, Mathf.Clamp01(_timerSwitchBack / hitDuration)));
 
             if (_timerSwitchBack >= hitDuration)
             {
@@ -180,9 +180,9 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (m_renderer.material.color != actualColor && m_renderer.material.color != targetColor && !switchBack)
+        if (_playerMaterial.GetColor("_BaseColor") != actualColor && _playerMaterial.GetColor("_BaseColor") != targetColor && !switchBack && !isHit)
         {
-            actualColor = m_renderer.material.color;
+            actualColor = _playerMaterial.GetColor("_BaseColor");
         }
     }
 

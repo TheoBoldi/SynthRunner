@@ -49,7 +49,7 @@ public class PaternGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.gamePause) return;
+        if (GameManager.Instance.gamePause || GameManager.Instance.isIntro) return;
         for (int i = 0; i < instanciatedObjects.Count; i++)
         {
             instanciatedObjects[i].transform.Translate(-Vector3.forward * Time.deltaTime * speed);
@@ -67,6 +67,11 @@ public class PaternGenerator : MonoBehaviour
             frequence = MusicManager.Instance.GetActiveFrequency();
             if (_oldFrequence != frequence)
             {
+                MusicManager.Instance._tunnel.RotateShape(_oldFrequence > frequence);
+                if (MusicManager.Instance.GetActiveIntensity() == 0)
+                {
+                    MusicManager.Instance._tunnel.RotateShape(false);
+                }
                 timerfrequence = 0;
                 _oldFrequence = frequence;
             }

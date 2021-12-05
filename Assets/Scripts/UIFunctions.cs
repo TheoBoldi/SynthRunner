@@ -2,15 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class UIFunctions : MonoBehaviour
 {
     private bool paused = false;
+    private bool _fadeMenu;
+    private float _timerFade;
+
+    public GameObject _mainMenuCanvas;
 
     public void Play()
     {
-        SceneManager.LoadScene(1);
+        if (GameManager.Instance.isIntro) return;
+        GameManager.Instance.LaunchIntro();
+        _fadeMenu = true;
     }
 
     public void Reload()
@@ -42,5 +49,19 @@ public class UIFunctions : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    void Update()
+    {
+        if (_fadeMenu)
+        {
+            _timerFade += Time.deltaTime;
+            _mainMenuCanvas.GetComponentInChildren<Image>().color = new Color(1,1,1,1 - _timerFade);
+            if (_timerFade >= 1)
+            {
+                _fadeMenu = false;
+                _mainMenuCanvas.SetActive(false);
+            }
+        }
     }
 }

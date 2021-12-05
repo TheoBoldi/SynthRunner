@@ -17,6 +17,7 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.isIntro || GameManager.Instance.gamePause) return;
         if(player.side == Side.Center)
         {
             transform.position = Vector3.Lerp(transform.position, new Vector3(0, transform.position.y, transform.position.z), followSpeed * Time.deltaTime);
@@ -32,4 +33,5 @@ public class CameraManager : MonoBehaviour
             transform.position = Vector3.Lerp(transform.position, new Vector3(cameraOffset, transform.position.y, transform.position.z), followSpeed * Time.deltaTime);
         }
     }
+
 }
