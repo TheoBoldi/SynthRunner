@@ -56,7 +56,10 @@ public class UIFunctions : MonoBehaviour
         if (_fadeMenu)
         {
             _timerFade += Time.deltaTime;
-            _mainMenuCanvas.GetComponentInChildren<Image>().color = new Color(1,1,1,1 - _timerFade);
+            foreach (var item in _mainMenuCanvas.GetComponentsInChildren<Image>())
+            {
+                item.color = new Color(1, 1, 1, 1 - _timerFade);
+            }
             if (_timerFade >= 1)
             {
                 _fadeMenu = false;
