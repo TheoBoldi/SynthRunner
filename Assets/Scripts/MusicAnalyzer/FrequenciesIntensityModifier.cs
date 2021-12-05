@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class FrequenciesIntensityModifier : FrequenciesModifier
 {
@@ -9,17 +10,18 @@ public class FrequenciesIntensityModifier : FrequenciesModifier
     public float maxIntensity;
     public float minIntensity;
     private float actualIntensity;
-    private PostProcessVolume _volume;
     private Bloom bloom;
 
     void Awake()
     {
         _useBeat = false;
         _useAmplitude = true;
-        _volume = GetComponent<PostProcessVolume>();
-        _volume.profile.TryGetSettings(out bloom);
-        bloom.intensity.value = minIntensity;
-        actualIntensity = minIntensity;
+        Volume vol = GetComponent<Volume>();
+        if (vol.sharedProfile.TryGet<Bloom>(out bloom))
+        {
+            bloom.intensity.value = minIntensity;
+            actualIntensity = minIntensity;
+        }
     }
 
     public override void OnUpdate()
@@ -34,9 +36,6 @@ public class FrequenciesIntensityModifier : FrequenciesModifier
 
         actualIntensity = Mathf.Lerp(minIntensity, maxIntensity, clampedIntensity);
         
-        _volume = gameObject.GetComponent<PostProcessVolume>();
-        Bloom bloom;
-        _volume.profile.TryGetSettings(out bloom);
         bloom.intensity.value = actualIntensity;
     }
 }

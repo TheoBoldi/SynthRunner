@@ -79,6 +79,10 @@ public class Phyllotaxis : MonoBehaviour
         }
     }
 
+    public void SetTrailColor(Color color)
+    {
+        _trailMat.SetColor("_TintColor", color);
+    }
     // Update is called once per frame
     void Update()
     {
