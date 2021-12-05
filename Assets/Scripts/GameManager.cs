@@ -15,6 +15,10 @@ public class GameManager : MonoBehaviour
     public Canvas gameCanvas;
     public Canvas gameOverCanvas;
 
+    public bool musicPause = false;
+    public bool gamePause = false;
+    public bool playerPause = false;
+    
     [HideInInspector]
     public int life = 1;
     [HideInInspector]

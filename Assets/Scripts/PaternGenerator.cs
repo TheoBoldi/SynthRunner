@@ -20,6 +20,8 @@ public class PaternList
 public class PaternGenerator : MonoBehaviour
 {
     public float frequence;
+    private float _oldFrequence;
+    private float timerfrequence;
     public float speed;
     public PaternList ListOfPaterns = new PaternList();
     private static bool firstSpawn = false;
@@ -28,32 +30,66 @@ public class PaternGenerator : MonoBehaviour
     private List<ObstacleType> actualParten = new List<ObstacleType>();
     private List<int> nextPossibleIndex = new List<int>();
 
+    private bool patternGeneration = true;
+
     // Start is called before the first frame update
     void Start()
     {
+        frequence = MusicManager.Instance.GetActiveFrequency();
+        _oldFrequence = frequence;
+
         firstSpawn = false;
 
         for (int i = 0; i < this.transform.childCount; i++)
         {
             gridPositions.Add(transform.transform.GetChild(i));
         }
-
-        StartCoroutine(InstanciatePatern());
     }
 
     // Update is called once per frame
     void Update()
     {
-        frequence = MusicManager.Instance.GetActiveFrequency();
+        if (GameManager.Instance.gamePause) return;
         for (int i = 0; i < instanciatedObjects.Count; i++)
         {
             instanciatedObjects[i].transform.Translate(-Vector3.forward * Time.deltaTime * speed);
         }
+        if (GameManager.Instance.musicPause) return;
+
+        if (patternGeneration)
+        {
+            if (MusicManager.Instance.GetActiveIntensity() == 0)
+            {
+                patternGeneration = false;
+                return;
+            }
+
+            frequence = MusicManager.Instance.GetActiveFrequency();
+            if (_oldFrequence != frequence)
+            {
+                timerfrequence = 0;
+                _oldFrequence = frequence;
+            }
+            timerfrequence += Time.deltaTime;
+            if (timerfrequence >= frequence)
+            {
+                InstanciatePatern();
+                timerfrequence = 0f;
+            }
+        }
+
+        if (!patternGeneration && timerfrequence != 0)
+            timerfrequence = 0;
+
+        if (!patternGeneration && MusicManager.Instance.GetActiveIntensity() > 0)
+            patternGeneration = true;
+
     }
 
-    IEnumerator InstanciatePatern()
+    void InstanciatePatern()
     {
         int rand;
+        actualParten.Clear();
 
         if (!firstSpawn)
         {
@@ -89,12 +125,8 @@ public class PaternGenerator : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(frequence);
-        actualParten.Clear();
 
         if (!firstSpawn)
             firstSpawn = true;
-
-        StartCoroutine(InstanciatePatern());
     }
 }
