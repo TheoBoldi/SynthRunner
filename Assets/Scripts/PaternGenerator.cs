@@ -123,10 +123,10 @@ public class PaternGenerator : MonoBehaviour
             }
             if(actualParten[i] != ObstacleType.Wall)
             {
-                var tmp = Resources.Load("Prefabs/Note");
+                /*var tmp = Resources.Load("Prefabs/Note");
                 GameObject newGO = Instantiate(tmp as GameObject, gridPositions[i].position, gridPositions[i].rotation);
                 newGO.transform.parent = this.gameObject.transform;
-                instanciatedObjects.Add(newGO);
+                instanciatedObjects.Add(newGO);*/
             }
         }
 

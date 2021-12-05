@@ -31,12 +31,17 @@ public class PlayerController : MonoBehaviour
     private Animator m_animator;
 
     public Material _playerMaterial;
+    private ParticleSystem trail;
+    private float sparkAngle;
+
     // Start is called before the first frame update
     void Start()
     {
         inCharge = false;
         isHit = false;
         switchBack = false;
+        trail = GetComponentInChildren<ParticleSystem>();
+        sparkAngle = trail.shape.angle;
         m_animator = GetComponentInChildren<Animator>();
         actualColor = _playerMaterial.GetColor("_BaseColor");
         rollDuration = m_animator.runtimeAnimatorController.animationClips[1].length;
@@ -89,6 +94,26 @@ public class PlayerController : MonoBehaviour
         Roll();
         GroundCheck();
         ChangeMaterial();
+
+        ParticleSystem.ShapeModule ps = trail.shape;
+
+        if (inRoll)
+        {
+            ps.angle = 40;
+        }
+        else if (isGrounded)
+        {
+            ps.angle = sparkAngle;
+        }
+        else
+        {
+            ps.angle = 0;
+        }
+
+        if(trail.startColor != _playerMaterial.color)
+        {
+            trail.startColor = _playerMaterial.color;
+        }
     }
 
     public void Jump()
