@@ -95,22 +95,28 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
         ChangeMaterial();
 
-        ParticleSystem.ShapeModule ps = trail.shape;
+        //ParticleSystem.ShapeModule ps = trail.shape;
+        ParticleSystem.EmissionModule emission = trail.emission;
 
         if (inRoll)
         {
-            ps.angle = 40;
+            //ps.angle = 40;
+            emission.rateOverTime = 500;
+            trail.startSpeed = 15;
         }
         else if (isGrounded)
         {
-            ps.angle = sparkAngle;
+            //ps.angle = sparkAngle;
+            emission.rateOverTime = 50;
+            trail.startSpeed = 5;
         }
         else
         {
-            ps.angle = 0;
+            //ps.angle = 0;
+            emission.rateOverTime = 0;
         }
 
-        if(trail.startColor != _playerMaterial.color)
+        if (trail.startColor != _playerMaterial.color)
         {
             trail.startColor = _playerMaterial.color;
         }
