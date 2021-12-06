@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public bool musicPause = false;
     public bool gamePause = true;
     public bool isIntro = false;
-    public float introDuration = 4.0f;
+    public float introDuration = 2.0f;
 
     [HideInInspector]
     public int life = 1;

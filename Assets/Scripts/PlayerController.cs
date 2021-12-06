@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     private Animator m_animator;
 
     public Material _playerMaterial;
-    private ParticleSystem trail;
+    private ParticleSystem[] trails;
     private float sparkAngle;
 
     // Start is called before the first frame update
@@ -40,8 +40,8 @@ public class PlayerController : MonoBehaviour
         inCharge = false;
         isHit = false;
         switchBack = false;
-        trail = GetComponentInChildren<ParticleSystem>();
-        sparkAngle = trail.shape.angle;
+        trails = GetComponentsInChildren<ParticleSystem>();
+        //sparkAngle = trail.shape.angle;
         m_animator = GetComponentInChildren<Animator>();
         actualColor = _playerMaterial.GetColor("_BaseColor");
         rollDuration = m_animator.runtimeAnimatorController.animationClips[1].length;
@@ -55,13 +55,15 @@ public class PlayerController : MonoBehaviour
         {
             inCharge = false;
 
-            if(side == Side.Center)
+            if (side == Side.Center)
             {
                 newXPos = -xMove;
+                SoundEffectManager.instance.PlayerMove();
                 side = Side.Left;
             }
-            else if(side == Side.Right)
+            else if (side == Side.Right)
             {
+                SoundEffectManager.instance.PlayerMove();
                 newXPos = 0;
                 side = Side.Center;
             }
@@ -73,11 +75,13 @@ public class PlayerController : MonoBehaviour
 
             if (side == Side.Center)
             {
+                SoundEffectManager.instance.PlayerMove();
                 newXPos = xMove;
                 side = Side.Right;
             }
             else if (side == Side.Left)
             {
+                SoundEffectManager.instance.PlayerMove();
                 newXPos = 0;
                 side = Side.Center;
             }
@@ -96,30 +100,34 @@ public class PlayerController : MonoBehaviour
         ChangeMaterial();
 
         //ParticleSystem.ShapeModule ps = trail.shape;
-        ParticleSystem.EmissionModule emission = trail.emission;
+        foreach (var trail in trails)
+        {
+            ParticleSystem.EmissionModule emission = trail.emission;
+            if (inRoll)
+            {
+                //ps.angle = 40;
+                emission.rateOverTime = 50;
+                trail.startSpeed = 15;
+            }
+            else if (isGrounded)
+            {
+                //ps.angle = sparkAngle;
+                emission.rateOverTime = 10;
+                trail.startSpeed = 5;
+            }
+            else
+            {
+                //ps.angle = 0;
+                emission.rateOverTime = 0;
+            }
+            if (trail.startColor != _playerMaterial.color)
+            {
+                trail.startColor = _playerMaterial.color;
+            }
+        }
 
-        if (inRoll)
-        {
-            //ps.angle = 40;
-            emission.rateOverTime = 500;
-            trail.startSpeed = 15;
-        }
-        else if (isGrounded)
-        {
-            //ps.angle = sparkAngle;
-            emission.rateOverTime = 50;
-            trail.startSpeed = 5;
-        }
-        else
-        {
-            //ps.angle = 0;
-            emission.rateOverTime = 0;
-        }
 
-        if (trail.startColor != _playerMaterial.color)
-        {
-            trail.startColor = _playerMaterial.color;
-        }
+
     }
 
     public void Jump()
@@ -136,7 +144,7 @@ public class PlayerController : MonoBehaviour
                 inJump = true;
             }
         }
-        else 
+        else
         {
             y -= jumpForce * 1.25f * gravityScale * Time.deltaTime;
         }
@@ -146,7 +154,7 @@ public class PlayerController : MonoBehaviour
     public void Roll()
     {
         rollCounter -= Time.deltaTime;
-        if(rollCounter <= 0f)
+        if (rollCounter <= 0f)
         {
             rollCounter = 0f;
             inRoll = false;

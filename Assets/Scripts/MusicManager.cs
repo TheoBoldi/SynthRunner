@@ -142,6 +142,7 @@ public class MusicManager : MonoBehaviour
                 GameManager.Instance.musicPause = false;
                 _audioSource.Play();
                 _transition = false;
+                m_timer = 0;
             }
         }
 

@@ -9,12 +9,13 @@ public class SoundEffectManager : MonoBehaviour
     public AudioSource hitObstacle;
     public AudioSource goodNote;
     public AudioSource launchGame;
+    public AudioSource playerMove;
+    public AudioSource title;
 
     private void Awake()
     {
         instance = this;
     }
-
     public void HitObstacle()
     {
         hitObstacle.Play();
@@ -28,5 +29,11 @@ public class SoundEffectManager : MonoBehaviour
     public void LaunchGame()
     {
         launchGame.Play();
+    }
+
+    public void PlayerMove()
+    {
+        playerMove.pitch = Random.Range(0.9f, 1.1f);
+        playerMove.Play();
     }
 }

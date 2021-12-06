@@ -64,7 +64,7 @@ public class TileManager : MonoBehaviour
         for (int i = 0; i < activeTiles.Count; i++)
         {
 
-            if (activeTiles[i].gameObject.transform.position.z < playerTransform.position.z - (tileLength / 2) - 1f)
+            if (activeTiles[i].gameObject.transform.position.z < playerTransform.position.z - (tileLength / 2) - 10f)
             {
                 activeTiles[i].transform.position = GetLastTilePosition(i);
             }
