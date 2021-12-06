@@ -12,7 +12,6 @@ public class TileLight : MonoBehaviour
     private bool _fadeOut = true;
     private bool _playerDetected;
 
-
     void Awake()
     {
         _matInstance = transform.GetChild(0).GetComponent<MeshRenderer>().material;
@@ -38,6 +37,7 @@ public class TileLight : MonoBehaviour
     void Update()
     {
         Color activeColor = _matInstance.GetColor("_BaseColor");
+        
         float alpha = activeColor.a;
 
         if (_playerDetected && _fadeOut)
@@ -66,6 +66,7 @@ public class TileLight : MonoBehaviour
         }
 
         activeColor.a = Mathf.Clamp01(alpha);
+        _matInstance.SetColor("_EmissionColor",ColorManager._activeColor);
         _matInstance.SetColor("_BaseColor",activeColor);
     }
 }

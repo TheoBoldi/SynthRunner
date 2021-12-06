@@ -20,7 +20,7 @@ public class TileManager : MonoBehaviour
     private List<GameObject> rightSideCubes = new List<GameObject>();
     private List<GameObject> activeTiles = new List<GameObject>();
     private Vector3 _resetPos;
-    void Start()
+    void Awake()
     {
         leftVolumeBar = GameObject.Find("LeftVolumeBar").transform.GetChild(0).gameObject;
         rightVolumeBar = GameObject.Find("RightVolumeBar").transform.GetChild(0).gameObject;

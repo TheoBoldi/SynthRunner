@@ -12,10 +12,12 @@ public class ColorManager : MonoBehaviour
 
     public List<Material> _glowyMaterials;
     public List<Material> _colorMaterials;
+    private List<Material> _tilesMaterials;
 
     private Phyllotaxis[] _phyllos;
 
-    private Color _activeColor;
+    private Color _baseColor;
+    public static Color _activeColor;
     private Color _targetColor;
     
     private bool _lerpingColor = false;
@@ -26,22 +28,24 @@ public class ColorManager : MonoBehaviour
     }
     void Start()
     {
-        _activeColor = MusicManager.Instance.GetActiveColor();
+        _baseColor = MusicManager.Instance.GetActiveColor();
         foreach (Phyllotaxis phyllo in _phyllos)
         {
-            phyllo.SetTrailColor(_activeColor);
+            phyllo.SetTrailColor(_baseColor);
         }
         foreach (Material mat in _colorMaterials)
         {
-            mat.SetColor("_BaseColor", _activeColor);
+            mat.SetColor("_BaseColor", _baseColor);
             if (mat.name != "Chara" && mat.name != "Border")
-                mat.SetColor("_EmissionColor", _activeColor);
+                mat.SetColor("_EmissionColor", _baseColor);
         }
         foreach (Material mat in _glowyMaterials)
         {
-            mat.SetColor("_EmissionColor", _activeColor * _minIntensity);
+            mat.SetColor("_EmissionColor", _baseColor * _minIntensity);
             
         }
+
+        _activeColor = _baseColor;
     }
 
     // Update is called once per frame
@@ -50,22 +54,25 @@ public class ColorManager : MonoBehaviour
         if (_lerpingColor)
         {
             _timerSwitchColor += Time.deltaTime;
+            _activeColor = Color.Lerp(_baseColor, _targetColor, Mathf.Clamp01(_timerSwitchColor / _timeSwitchColor));
+            foreach (Phyllotaxis phyllo in _phyllos)
+            {
+                phyllo.SetTrailColor(_activeColor);
+            }
             foreach (Material mat in _colorMaterials)
             {
-                foreach (Phyllotaxis phyllo in _phyllos)
-                {
-                    phyllo.SetTrailColor(Color.Lerp(_activeColor, _targetColor, Mathf.Clamp01(_timerSwitchColor / _timeSwitchColor)));
-                }
-                mat.SetColor("_BaseColor", Color.Lerp(_activeColor, _targetColor, Mathf.Clamp01(_timerSwitchColor/_timeSwitchColor)));
+                mat.SetColor("_BaseColor", _activeColor);
                 if(mat.name != "Chara" && mat.name != "Border")
-                mat.SetColor("_EmissionColor", Color.Lerp(_activeColor, _targetColor, Mathf.Clamp01(_timerSwitchColor/_timeSwitchColor)));
+                mat.SetColor("_EmissionColor", _activeColor);
                 if (_timerSwitchColor >= _timeSwitchColor)
                 {
                     mat.SetColor("_BaseColor", _targetColor);
                     _lerpingColor = false;
-                    _activeColor = _targetColor;
+                    _baseColor = _targetColor;
+                    _activeColor = _baseColor;
                 }
             }
+            
         }
         else
         {
@@ -77,7 +84,7 @@ public class ColorManager : MonoBehaviour
     {
         foreach (Material mat in _glowyMaterials)
         {
-            mat.SetColor("_EmissionColor", _activeColor * Mathf.Lerp(_minIntensity,_maxIntensity,AudioPeer._amplitudeBuffer));
+            mat.SetColor("_EmissionColor", _baseColor * Mathf.Lerp(_minIntensity,_maxIntensity,AudioPeer._amplitudeBuffer));
         }
     }
 
@@ -88,7 +95,7 @@ public class ColorManager : MonoBehaviour
         _lerpingColor = true;
         foreach (Material mat in _glowyMaterials)
         {
-            mat.SetColor("_EmissionColor", _activeColor * _minIntensity);
+            mat.SetColor("_EmissionColor", _baseColor * _minIntensity);
         }
     }
 }
